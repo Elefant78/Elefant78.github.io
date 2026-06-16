@@ -1,0 +1,62 @@
+name: Build und Deploy auf GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Wenn mehrere Pushes gleichzeitig kommen: den älteren abbrechen,
+# den letzten gewinnen lassen. Verhindert "zwischen-Deploys"-Konflikte.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20 installieren
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: NPM-Pakete installieren
+        run: npm ci
+
+      - name: Production-Build
+        run: npm run build
+
+      # SPA-Fix: GitHub Pages serviert bei direktem Aufruf einer
+      # Sub-Route (z.B. /projekte/aktienwatcher) sonst ein 404.
+      # Mit einer identischen 404.html lädt der Browser dort
+      # dieselbe SPA und React Router rendert die richtige Seite.
+      - name: SPA-Fallback (index.html nach 404.html kopieren)
+        run: cp dist/index.html dist/404.html
+
+      - name: Pages konfigurieren
+        uses: actions/configure-pages@v5
+
+      - name: Build-Artefakt hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Auf GitHub Pages deployen
+        id: deployment
+        uses: actions/deploy-pages@v4
