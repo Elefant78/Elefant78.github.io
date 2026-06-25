@@ -33,7 +33,7 @@ export const projects: Project[] = [
         body: '',
         items: [
           'Sequence-Modeling: warum LSTM, wann Transformer - bei kleinen Datensätzen ist LSTM robuster.',
-          'Daten-Augmentation durch Sliding-Windows: aus 4×5 Aufnahmen werden 1700 Trainings-Samples.',
+          'Daten-Augmentation durch Sliding-Windows: aus 4x5 Aufnahmen werden 1700 Trainings-Samples.',
           'Pose-Normalisierung relativ zur Hüfte: ohne diesen Schritt lernt das Modell nur deine Aufnahme-Position.',
           'Real-Time-Constraints: alles muss in unter 33ms durchlaufen, sonst ruckelt der Stream.',
           'Erklärbare vs. ML-getriebene Komponenten: Klassifikation per Modell, Feedback bewusst per Regel.'
@@ -52,6 +52,7 @@ export const projects: Project[] = [
     techs: ['React 18', 'TypeScript', 'Vite', 'React Router', 'Recharts', 'Finnhub API'],
     liveUrl: 'https://aktien-watcher-3rub.vercel.app/',
     repoUrl: 'https://github.com/Elefant78/aktien-watcher-',
+    screenshot: '/screenshots/aktienwatcher.png',
     highlights: [
       'Live-Kurse mit Auto-Refresh und localStorage-Persistenz',
       'Charts und %-Vergleich von bis zu 3 Aktien gleichzeitig',
@@ -91,6 +92,7 @@ export const projects: Project[] = [
     status: 'live',
     techs: ['C# 12', '.NET 8', 'WPF', 'EF Core', 'SQLite', 'xUnit', 'GitHub Actions'],
     repoUrl: 'https://github.com/Elefant78/FinanzManager',
+    screenshot: '/screenshots/finanzmanager.png',
     highlights: [
       'MVVM mit eigener Infrastruktur (ViewModelBase, RelayCommand, AsyncRelayCommand)',
       'Repository-Pattern mit Interfaces - macht Tests überhaupt erst möglich',
@@ -127,26 +129,37 @@ export const projects: Project[] = [
   },
   {
     slug: 'blackjack',
-    title: 'Online-Blackjack',
+    title: 'Online-Blackjack (21)',
     tagline: 'Multiplayer-Spiel: gemeinsam online gegen den Dealer',
     description:
-      'Browser-basiertes Blackjack zum gemeinsamen Spielen mit Freunden. Mein erstes echtes Team-Projekt - geteilte Codebase, Code-Reviews, Merge-Konflikte.',
-    year: '2025',
+      'Browser-basiertes Blackjack zum gemeinsamen Spielen mit Freunden. Mein erstes echtes Team-Projekt mit Fynn - geteilte Codebase, Code-Reviews, Merge-Konflikte. Doku, Lernperioden-Reflexion und Arbeitspakete in einem separaten Repository.',
+    year: '2026',
     status: 'archived',
-    techs: ['JavaScript', 'HTML5', 'CSS', 'WebSockets'],
+    techs: ['JavaScript', 'HTML5', 'CSS', 'Multiplayer-Logik', 'Azure App Service'],
+    liveUrl: 'https://blackjacck21-dubwbnf2eyhjd4b0.swedencentral-01.azurewebsites.net',
+    repoUrl: 'https://github.com/Fynn8962/21',
+    docsUrl: 'https://github.com/Elefant78/Lernperiode-14',
     highlights: [
-      'Erstes ernsthaftes Multi-Player-Spiel mit Realtime-State',
-      'Teamarbeit mit zwei Freunden - Git, Branches, Reviews',
-      'Vollständige Spielregel-Logik inkl. Splits und Doubles'
+      'Erstes ernsthaftes Multi-Player-Spiel mit synchronisiertem Spielzustand',
+      'Online live spielbar - gehostet auf Azure App Service',
+      'Teamarbeit mit Fynn - Git-Workflow mit Branches und Pull Requests',
+      'Vollständige Blackjack-Regel-Logik inklusive Sonderfälle',
+      'Separates Doku-Repository mit README und Arbeitspaketen aus der Lernperiode'
     ],
     sections: [
+      {
+        heading: 'Aufteilung der Repositories',
+        body:
+          'Der Code liegt in Fynns Repository (Fynn8962/21), weil er das Projekt-Setup gemacht hat. Die Doku, das ausführliche README und unsere Arbeitspakete habe ich in mein eigenes Repository (Elefant78/Lernperiode-14) gelegt - so kann jedes Repository für sich gelesen werden, ohne die Code-Historie mit Doku-Commits zu verwässern.'
+      },
       {
         heading: 'Was ich gelernt habe',
         body: '',
         items: [
           'Realtime-State-Synchronisation zwischen mehreren Clients.',
-          'Team-Workflow mit Git: Branches, PRs, Konflikte lösen.',
-          'Das Wichtigste: nicht alles selbst machen wollen, sondern aufteilen und vertrauen.'
+          'Team-Workflow mit Git: Branches, Pull Requests, Konflikte lösen.',
+          'Verantwortlichkeiten klar aufteilen statt alles selbst machen zu wollen.',
+          'Dokumentation getrennt von Code halten, wenn das Projekt damit übersichtlicher wird.'
         ]
       }
     ]
@@ -190,7 +203,8 @@ export const projects: Project[] = [
     sections: [
       {
         heading: 'Hier zeige ich Folgendes',
-        body: 'Dass die Basis sitzt. Wer mit React anfängt, ohne die Web-Plattform selbst zu verstehen, scheitert beim ersten Bug der nicht im Framework liegt.'
+        body:
+          'Dass die Basis sitzt. Wer mit React anfängt, ohne die Web-Plattform selbst zu verstehen, scheitert beim ersten Bug der nicht im Framework liegt.'
       }
     ]
   }

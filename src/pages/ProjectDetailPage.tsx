@@ -2,6 +2,12 @@ import { Link, useParams } from 'react-router-dom';
 import { findProject } from '../data/projects';
 import TechBadge from '../components/TechBadge';
 
+const STATUS_LABEL: Record<'live' | 'wip' | 'archived', string> = {
+  live: 'Live',
+  wip: 'In Arbeit',
+  archived: 'Archiv'
+};
+
 export default function ProjectDetailPage() {
   const { slug = '' } = useParams<{ slug: string }>();
   const project = findProject(slug);
@@ -21,7 +27,7 @@ export default function ProjectDetailPage() {
       <Link to="/projekte" className="detail-back">← Zurück zu Projekten</Link>
 
       <div className="detail-hero">
-        <div className="section-label">{project.year} · {project.status === 'live' ? 'Live' : project.status === 'wip' ? 'In Arbeit' : 'Archiv'}</div>
+        <div className="section-label">{project.year} · {STATUS_LABEL[project.status]}</div>
         <h1>{project.title}</h1>
         <p style={{ fontSize: '1.15rem', marginTop: 'var(--space-3)', maxWidth: 720 }}>
           {project.tagline}
@@ -39,11 +45,22 @@ export default function ProjectDetailPage() {
           )}
           {project.repoUrl && (
             <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
-              Auf GitHub
+              Code-Repository
+            </a>
+          )}
+          {project.docsUrl && (
+            <a href={project.docsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              Dokumentation
             </a>
           )}
         </div>
       </div>
+
+      {project.screenshot && (
+        <div className="detail-screenshot">
+          <img src={project.screenshot} alt={`${project.title} Screenshot`} />
+        </div>
+      )}
 
       <div className="detail-section">
         <h2>Worum es geht</h2>
