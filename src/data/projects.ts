@@ -2,6 +2,62 @@ import type { Project } from '../types/project';
 
 export const projects: Project[] = [
   {
+    slug: 'battleship',
+    title: 'Schiffe versenken (Battleship)',
+    tagline: 'API-Game mit .NET 8 Backend, JWT-Auth, SQLite und einem Bot mit Hunt-&-Target-Strategie',
+    description:
+      'Das klassische Schiffe versenken als Full-Stack-Projekt: Ein C#/.NET 8 Backend verwaltet die verdeckten Flotten, validiert jeden Zug serverseitig und stellt eine REST-API bereit. Gespielt wird im Browser gegen einen Bot, der nach einem Treffer gezielt weiterjagt. 24 Unit Tests sichern Regel-Engine und Bot ab.',
+    year: '2026',
+    status: 'live',
+    techs: ['C# 12', '.NET 8', 'ASP.NET Core', 'EF Core', 'SQLite', 'JWT', 'Swagger', 'xUnit', 'REST API', 'Vanilla JS'],
+    repoUrl: 'https://github.com/Elefant78/Battleship',
+    screenshot: '/screenshots/battleship.png',
+    highlights: [
+      'Hidden Information sauber gelöst: Die gegnerischen Schiffspositionen verlassen nie die Service-Schicht - das Frontend bekommt nur Miss/Hit/Sunk',
+      'Unerbittliche Regel-Engine: Flottenvalidierung (keine Überlappung, keine Berührung), Zugreihenfolge und Doppelschuss-Sperre serverseitig erzwungen',
+      'Bot mit Hunt-&-Target: Schachbrettmuster in der Suche, nach einem Treffer systematische Jagd entlang der Trefferlinie bis zum Versenken',
+      '24 Unit Tests (xUnit) plus kompletter End-to-End-Durchlauf einer Partie über die API',
+      'Web-Frontend ohne Frameworks: Platzierung per Klick mit Live-Vorschau, Soundeffekte per Web Audio API, Flotten-Auflösung am Spielende'
+    ],
+    sections: [
+      {
+        heading: 'Architektur',
+        body:
+          'Die Solution besteht aus der Web-API (Controller, JWT-Auth, Swagger, Error-Middleware), einer Service-Schicht mit der kompletten Spiellogik (GameService als Regel-Engine, BotService, FleetValidator) und EF Core mit SQLite für die Persistenz. Vier Tabellen - Users, Games, Ships, Moves - speichern den Zustand, sodass Partien jederzeit unterbrochen und fortgesetzt werden können. Das statische Frontend wird direkt von der API ausgeliefert.'
+      },
+      {
+        heading: 'Regel-Engine & Sicherheit',
+        body: '',
+        items: [
+          'Jeder Schuss wird serverseitig validiert: Bist du Teilnehmer? Bist du an der Reihe? Wurde das Feld schon beschossen? Verstösse liefern saubere HTTP-Fehler (400/401/403/404/409).',
+          'Die Flottenaufstellung wird als Ganzes geprüft: richtige Zusammensetzung (1x4, 2x3, 3x2, 4x1), alles im 10x10-Raster, keine Überlappung und keine Berührung - auch nicht diagonal.',
+          'Treffer werden pro Schiff als Bitmaske gespeichert - Versenkt-Erkennung und Siegbedingung sind damit ein Bitvergleich.',
+          'Ein Unique-Index auf der Move-Tabelle verhindert Doppelschüsse zusätzlich auf Datenbank-Ebene.'
+        ]
+      },
+      {
+        heading: 'Der Bot',
+        body:
+          'Der Bot platziert seine Flotte zufällig, aber immer regelkonform. Beim Schiessen arbeitet er in zwei Modi: Im Hunt-Modus feuert er in einem Schachbrettmuster, das jedes Schiff ab zwei Feldern garantiert kreuzt. Nach einem Treffer wechselt er in den Target-Modus, beschiesst die Nachbarfelder und verlängert bei zwei Treffern die Linie an beiden Enden, bis das Schiff versenkt ist. In Bot-Partien antwortet er im selben API-Request - ohne zusätzliche Infrastruktur.'
+      },
+      {
+        heading: 'Testing',
+        body:
+          'Das xUnit-Projekt deckt die Kernlogik mit 24 Tests ab: Flottenvalidierung mit allen Fehlerfällen, Hit/Miss/Sunk-Erkennung, Zugreihenfolge, Siegbedingung, Schutz vor Fremdzugriff und die Bot-Strategie (legale Platzierung, gezieltes Nachsetzen, Effizienz gegenüber blindem Feuern). Die Tests laufen gegen eine In-Memory-SQLite-Datenbank, also ohne Mock-Verzerrung durch das echte EF-Core-Verhalten.'
+      },
+      {
+        heading: 'Was ich gelernt habe',
+        body: '',
+        items: [
+          'Hidden-Information-Spiele brauchen eine klare Grenze: Der Client bekommt eine Sicht, nie den Zustand.',
+          'Eine Regel-Engine, die jeden Zug validiert, macht das Spiel gleichzeitig robust und testbar.',
+          'Klassische Spiel-KI ohne Machine Learning: Hunt & Target ist einfach zu implementieren und spielt spürbar stark.',
+          'DOM-Rebuilds während Maus-Interaktionen verschlucken Click-Events - einmal bauen, dann nur noch Klassen ändern.'
+        ]
+      }
+    ]
+  },
+  {
     slug: 'nexusshop',
     title: 'NexusShop',
     tagline: 'Product-Microservice in ASP.NET Core 8 mit Clean Architecture',
