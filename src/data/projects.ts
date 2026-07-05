@@ -2,6 +2,56 @@ import type { Project } from '../types/project';
 
 export const projects: Project[] = [
   {
+    slug: 'nexusshop',
+    title: 'NexusShop',
+    tagline: 'Product-Microservice in ASP.NET Core 8 mit Clean Architecture',
+    description:
+      'Ein produktionsnaher Product-Microservice für eine E-Commerce-Plattform. Vier sauber getrennte Schichten, EF Core Code-First, JWT-gesicherte Admin-Endpunkte, FluentValidation und eine xUnit-Test-Suite mit über 80% Abdeckung der Geschäftslogik.',
+    year: '2026',
+    status: 'live',
+    techs: ['C# 12', '.NET 8', 'ASP.NET Core', 'EF Core', 'JWT', 'FluentValidation', 'Swagger', 'xUnit', 'Moq', 'FluentAssertions'],
+    repoUrl: 'https://github.com/Elefant78/NexusShop',
+    highlights: [
+      'Clean Architecture mit strikter Dependency-Rule - der Domain-Layer hat null externe Abhängigkeiten',
+      'JWT-Authentifizierung mit Rollen: nur Admins dürfen Produkte anlegen, ändern, löschen',
+      'EF Core Code-First mit Fluent API und Money als Owned-Value-Object',
+      'Über 80% Test-Abdeckung der Application-Logik mit gemockten Repositories (Moq + FluentAssertions)',
+      'Läuft sofort ohne Setup: SQLite-Fallback neben SQL Server, clonen und starten'
+    ],
+    sections: [
+      {
+        heading: 'Architektur',
+        body:
+          'Die Solution ist in vier Projekte geteilt: Domain (Entities, Value Objects, Repository-Interfaces), Application (Use-Cases, DTOs, Mapping, Validierung), Infrastructure (EF Core, Repositories, Unit of Work) und WebAPI (Controller, JWT, Swagger, Middleware). Die Abhängigkeiten zeigen immer nach innen - die WebAPI kennt die Infrastructure, aber der Domain-Kern kennt niemanden.'
+      },
+      {
+        heading: 'Bewusste Entscheidungen',
+        body: '',
+        items: [
+          'Repository-Interfaces im Domain-Layer, Implementierung in Infrastructure: das ist Dependency Inversion, dadurch wird die Geschäftslogik überhaupt erst testbar.',
+          'Money als Owned-Value-Object statt zwei loser Spalten: Preis und Währung gehören zusammen und validieren sich selbst.',
+          'Rich Entities statt anämischer Models: ein Product kann nie in einen ungültigen Zustand geraten, weil jede Änderung durch Methoden mit Invarianten läuft.',
+          'Exceptions als Cross-Cutting-Concern: eine Middleware übersetzt NotFound/Validation/Domain-Fehler in saubere HTTP-Statuscodes, die Controller bleiben schlank.'
+        ]
+      },
+      {
+        heading: 'Testing',
+        body:
+          'Das Test-Projekt deckt die Application-Services mit xUnit ab. Die Repositories werden mit Moq simuliert, sodass die Logik ohne Datenbank in Isolation läuft. FluentAssertions macht die Assertions lesbar, und die Validatoren sowie Domain-Invarianten sind separat getestet.'
+      },
+      {
+        heading: 'Was ich gelernt habe',
+        body: '',
+        items: [
+          'Clean Architecture in der Praxis: wo welche Verantwortung hingehört und warum die Dependency-Rule so wichtig ist.',
+          'Unit of Work über dem DbContext: ein Use-Case committet eine Transaktion und bleibt voll mockbar.',
+          'JWT und rollenbasierte Autorisierung sauber in ASP.NET Core konfigurieren - inklusive Bearer-Token-Eingabe direkt in Swagger.',
+          'Provider-agnostisches EF Core: dasselbe Modell läuft auf SQLite und SQL Server, mit HasPrecision statt provider-spezifischer Spaltentypen.'
+        ]
+      }
+    ]
+  },
+  {
     slug: 'formcheck',
     title: 'FormCheck',
     tagline: 'KI-Fitness-Coach mit Pose-Estimation und selbst trainiertem LSTM',
