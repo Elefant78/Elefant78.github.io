@@ -2,6 +2,64 @@ import type { Project } from '../types/project';
 
 export const projects: Project[] = [
   {
+    slug: 'connectfouronline',
+    title: '4 gewinnt Online',
+    tagline: 'Multiplayer mit .NET-Backend und SignalR - server-autoritativ, mit Reconnect',
+    description:
+      'Die dritte Ausbaustufe meines 4-gewinnt-Projekts und das erste Projekt, das meine beiden Welten kombiniert: TypeScript/React-Frontend und C#/.NET-8-Backend. Gespielt wird live über SignalR (WebSockets) - der Server ist die einzige Autorität über den Spielzustand, validiert jeden Zug und stellt Partien nach Verbindungsabbrüchen nahtlos wieder her.',
+    year: '2026',
+    status: 'live',
+    techs: ['C# 12', '.NET 8', 'ASP.NET Core', 'SignalR', 'WebSockets', 'TypeScript', 'React 18', 'Vite', 'xUnit', 'Vitest', 'GitHub Actions', 'Azure App Service'],
+    liveUrl: 'https://connectfouronline-hqh2a7hscrdgdcaw.germanywestcentral-01.azurewebsites.net/',
+    repoUrl: 'https://github.com/Elefant78/ConnectFourOnline',
+    screenshot: '/screenshots/connectfouronline.png',
+    highlights: [
+      'Server-autoritative Spiellogik: jeder Zug wird serverseitig validiert (bist du im Spiel? bist du dran? ist die Spalte frei?) - ein manipulierter Client kann nicht schummeln',
+      'Reconnect-Konzept: Session-ID im localStorage statt Verbindungs-Identität - Browser-Reload oder WLAN-Aussetzer mitten in der Partie, und es geht nahtlos weiter',
+      'Die Domain ist die 1:1-C#-Portierung der TypeScript pure functions aus ConnectFour: gleiche Denkweise (immutabler State), zwei Sprachen',
+      'Nach jeder Änderung schickt der Server beiden Spielern einen kompletten Snapshot - der Client rendert nur noch, kein Zustand kann auseinanderlaufen',
+      '31 xUnit-Tests inkl. einer kompletten E2E-Partie mit zwei echten SignalR-Clients (Sieg, Revanche-Abstimmung, Reconnect mitten im Spiel) plus 8 Vitest-Tests'
+    ],
+    sections: [
+      {
+        heading: 'Drei Ausbaustufen, ein Spiel',
+        body:
+          'Stufe 1: lokal und gegen die Minimax-KI (reines Frontend). Stufe 2: online per WebRTC, Peer-to-Peer ohne Server. Stufe 3, dieses Projekt: server-autoritativ mit ASP.NET Core und SignalR. Die P2P-Version funktioniert, aber beide Clients müssen einander vertrauen und ohne Vermittler gibt es keinen Reconnect. Hier fällt jede fachliche Entscheidung auf dem Server - der Client zeigt nur an, was der Server bestätigt.'
+      },
+      {
+        heading: 'Architektur: Hub → GameService → Domain',
+        body:
+          'Drei Schichten mit klarer Verantwortung: Der SignalR-Hub ist reiner Transport (~100 Zeilen), der GameService verwaltet Räume, Sessions und Regeldurchsetzung, und die Domain enthält die Spiellogik als pure functions mit immutablem GameState. Nach jeder Änderung bekommen beide Spieler einen kompletten Snapshot ihrer Sicht - das macht den Client trivial und Reconnect gratis: der erste Snapshot nach der Rückkehr stellt alles wieder her.'
+      },
+      {
+        heading: 'Das Reconnect-Konzept',
+        body: '',
+        items: [
+          'Beim Erstellen/Beitreten bekommt jeder Spieler eine geheime Session-ID, die der Client im localStorage ablegt - die SignalR-Verbindung ist NICHT die Identität des Spielers.',
+          'Bricht die Verbindung ab, bleibt der Platz reserviert; der Gegner sieht den Verbindungsstatus live.',
+          'Der Client meldet sich mit Reconnect(sessionId) zurück - nach einem Reload genauso wie nach einem automatischen SignalR-Reconnect - und bekommt Brett, Runde und Punktestand als Snapshot.',
+          'Timeout-Regel: ein BackgroundService schliesst Räume, in denen ein Spieler länger als 2 Minuten weg ist, und benachrichtigt den Verbliebenen.'
+        ]
+      },
+      {
+        heading: 'Testing',
+        body:
+          'Vitest deckt die Anzeige-Logik des Frontends ab, xUnit den Server: portierte Kernlogik, Raum-Lifecycle, Regeldurchsetzung (nicht am Zug, ohne Gegner, volle Spalte), Revanche-Abstimmung mit Startspieler-Wechsel und die Timeout-Regel. Das Highlight ist der E2E-Test: zwei echte SignalR-Clients spielen gegen den In-Memory-TestServer eine komplette Partie durch - inklusive Regelverstoss, Sieg, Revanche und einem Reconnect mitten in Runde 2. Zusätzlich wurde der komplette Flow im Browser verifiziert (zwei isolierte Profile, Reload mitten im Spiel).'
+      },
+      {
+        heading: 'Was ich gelernt habe',
+        body: '',
+        items: [
+          'WebSockets drehen HTTP um: der Server kann von sich aus reden - SignalR macht daraus Methodenaufrufe in beide Richtungen, inklusive Fallbacks und Auto-Reconnect.',
+          'Verbindung und Identität müssen getrennte Konzepte sein, sonst beendet jeder Reload das Spiel.',
+          'Vollständige Snapshots statt Delta-Updates: minimal mehr Bandbreite, dafür kann der Client-Zustand nie auseinanderlaufen.',
+          'Ein Raum-Lock plus ConcurrentDictionary reicht für sauberes Concurrency-Verhalten - man braucht nicht immer verteilte Systeme.',
+          'Dieselbe Logik in TypeScript und C# zu haben zeigt: die Denkweise (pure functions, immutabler State) ist die eigentliche Portierung, nicht die Syntax.'
+        ]
+      }
+    ]
+  },
+  {
     slug: 'connectfour',
     title: '4 gewinnt (Connect Four)',
     tagline: 'Browser-Spiel mit Minimax-KI und Online-Modus per WebRTC – live spielbar auf GitHub Pages',
