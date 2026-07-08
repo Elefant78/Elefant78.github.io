@@ -2,6 +2,71 @@ import type { Project } from '../types/project';
 
 export const projects: Project[] = [
   {
+    slug: 'connectfour',
+    title: '4 gewinnt (Connect Four)',
+    tagline: 'Browser-Spiel mit Minimax-KI und Online-Modus per WebRTC – live spielbar auf GitHub Pages',
+    description:
+      'Das klassische 4 gewinnt als reines Frontend-Projekt: TypeScript, React und Vite, eine Minimax-KI mit Alpha-Beta-Pruning in drei Schwierigkeitsgraden, ein lokaler 2-Spieler-Modus und ein Online-Modus, der per WebRTC direkt von Browser zu Browser spielt - ganz ohne eigenen Server. Die komplette Spiellogik ist als pure functions von React getrennt und mit 36 Unit Tests abgesichert.',
+    year: '2026',
+    status: 'live',
+    techs: ['TypeScript', 'React 18', 'Vite', 'Minimax', 'Alpha-Beta-Pruning', 'WebRTC', 'PeerJS', 'Vitest', 'Web Audio API', 'GitHub Actions', 'GitHub Pages'],
+    liveUrl: 'https://elefant78.github.io/ConnectFour/',
+    repoUrl: 'https://github.com/Elefant78/ConnectFour',
+    screenshot: '/screenshots/connectfour.png',
+    highlights: [
+      'Minimax mit Alpha-Beta-Pruning: die Stufe "schwer" durchsucht den Spielbaum bis Tiefe 7 und antwortet dank Zugsortierung (Mitte zuerst) trotzdem deutlich unter einer Sekunde',
+      'Bewertungsfunktion über alle 4er-Fenster des Bretts: offene Dreier stark gewichtet, Zentrumsspalte bevorzugt - sofortige Gewinnzüge und Blocks sind auf jeder Stufe garantiert',
+      'Online-Modus per WebRTC (PeerJS): Spiel erstellen, Einladungslink oder 6-stelligen Code verschicken, Züge laufen direkt von Browser zu Browser - ohne eigenen Server',
+      'Strikte Trennung von Logik und UI: die komplette Spiellogik lebt als pure functions mit immutablem State in eigenen Modulen ohne React-Import',
+      '36 Unit Tests (Vitest): Gewinn-Erkennung in allen vier Richtungen, ungültige Züge, KI-Pflichtzüge, Online-Protokoll und eine komplette programmatische Partie KI gegen KI',
+      'Hover-Vorschau, Fall-Animation, Gewinnlinien-Hervorhebung, Undo, Punktestand und synthetisierte Sounds per Web Audio API - responsive und komplett auf Deutsch'
+    ],
+    sections: [
+      {
+        heading: 'Die KI: Minimax mit Alpha-Beta-Pruning',
+        body:
+          'Die KI simuliert abwechselnd eigene Züge und die besten Antworten des Gegners bis zu einer festen Suchtiefe und wählt den Zug mit dem besten garantierten Ergebnis. Alpha-Beta-Pruning schneidet dabei Äste ab, in die ein perfekter Gegenspieler nie hineinlaufen würde - das Ergebnis bleibt identisch, aber die Suche wird um Grössenordnungen schneller. Damit das Pruning oft greift, werden die Spalten von der Mitte nach aussen untersucht: gute Züge zuerst bedeutet mehr abgeschnittene Äste.'
+      },
+      {
+        heading: 'Bewertungsfunktion & Schwierigkeitsgrade',
+        body: '',
+        items: [
+          'Am Ende der Suchtiefe werden alle 4er-Fenster des Bretts (horizontal, vertikal, beide Diagonalen) gezählt: eigene Steine positiv, gegnerische negativ, offene Dreier stark gewichtet.',
+          'Steine in der Zentrumsspalte bekommen einen Bonus, weil durch die Mitte die meisten Gewinnlinien laufen.',
+          'Die Schwierigkeitsgrade steuern die Suchtiefe: leicht = 2, mittel = 4, schwer = 7. "Leicht" spielt zusätzlich mit 35% Wahrscheinlichkeit einen Zufallszug.',
+          'Unabhängig von der Stufe gilt: sofortige Gewinnzüge werden immer genommen und gegnerische Gewinnzüge immer blockiert - diese Prüfung läuft vor allem anderen.'
+        ]
+      },
+      {
+        heading: 'Architektur',
+        body:
+          'Die Spiellogik (Brett, Züge, Gewinnprüfung, KI) liegt in eigenen Modulen als pure functions mit immutablem State - ohne einen einzigen React-Import. Jeder Zug erzeugt einen neuen GameState, der alte bleibt unverändert. Das macht die Logik isoliert testbar und Undo trivial: die Zug-Historie wird einfach ohne die letzten Züge neu abgespielt. React kümmert sich nur um Darstellung und Interaktion.'
+      },
+      {
+        heading: 'Online-Modus: Peer-to-Peer per WebRTC',
+        body:
+          'Auch online bleibt das Spiel ein reines Frontend-Projekt ohne eigenen Server: Der Host erstellt ein Spiel und bekommt einen 6-stelligen Code plus Einladungslink, der Gast tritt damit bei. Der öffentliche PeerJS-Signalserver vermittelt nur den Verbindungsaufbau - danach laufen alle Züge direkt zwischen den beiden Browsern über einen WebRTC-DataChannel. Der Startspieler wechselt pro Runde deterministisch aus der Rundennummer, empfangene Nachrichten werden zur Laufzeit validiert und Züge nur übernommen, wenn der Gegner wirklich am Zug ist.'
+      },
+      {
+        heading: 'Testing & Deployment',
+        body:
+          'Vitest deckt Kernlogik und Online-Protokoll mit 36 Tests ab: Gewinn-Erkennung in allen vier Richtungen, Unentschieden, ungültige Züge (volle Spalte, Zug nach Spielende), Immutabilität, KI-Pflichtzüge auf allen Stufen (Gewinnen geht vor Blockieren), Antwortzeit unter einer Sekunde, eine komplette Partie KI gegen KI sowie Spiel-Codes und Nachrichten-Validierung des Online-Protokolls. Der Online-Flow wurde zusätzlich End-to-End mit zwei Browser-Instanzen über den echten Signalserver verifiziert. Ein GitHub-Actions-Workflow testet und baut bei jedem Push und deployed automatisch auf GitHub Pages.'
+      },
+      {
+        heading: 'Was ich gelernt habe',
+        body: '',
+        items: [
+          'Klassische Spielbaum-Suche: Minimax denkt in Garantien, nicht in Hoffnungen - der Gegner wird immer als perfekt angenommen.',
+          'Alpha-Beta-Pruning lebt von der Zugsortierung: gute Züge zuerst macht aus derselben Suchtiefe ein Vielfaches an Geschwindigkeit.',
+          'Immutabler State macht Spiellogik testbar und Features wie Undo fast gratis.',
+          'WebRTC braucht keinen Spielserver: ein Signalserver für den Verbindungsaufbau reicht, danach reden die Browser direkt miteinander - Peer-Daten müssen aber wie jede Nutzereingabe validiert werden.',
+          'Soundeffekte brauchen keine Audiodateien: die Web Audio API synthetisiert Plopp, Sieg-Arpeggio und Remis-Ton aus Oszillatoren.',
+          'Vite-Apps auf GitHub Pages brauchen die richtige base-Konfiguration, sonst zeigen alle Asset-Pfade ins Leere.'
+        ]
+      }
+    ]
+  },
+  {
     slug: 'battleship',
     title: 'Schiffe versenken (Battleship)',
     tagline: 'API-Game mit .NET 8 Backend, JWT-Auth, SQLite und einem Bot mit Hunt-&-Target-Strategie',
